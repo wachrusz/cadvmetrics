@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RPS Monitor</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #chart-container {
+            width: 80%;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>RPS Monitor</h1>
+    <div id="chart-container">
+        <canvas id="rpsChart"></canvas>
+    </div>
+
+    <script>
+        const apiUrl = 'http://localhost:3000/api/v1/metrics/rps';
+        const chartCanvas = document.getElementById('rpsChart').getContext('2d');
+        let rpsData = [];
+        let labels = [];
+
+        const rpsChart = new Chart(chartCanvas, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'RPS',
+                    data: rpsData,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        const eventSource = new EventSource(apiUrl);
+
+        eventSource.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            const currentTime = new Date().toLocaleTimeString();
+            const rpsValue = data.rps;
+
+            labels.push(currentTime);
+            rpsData.push(rpsValue);
+
+            if (labels.length > 10) {
+                labels.shift();
+                rpsData.shift();
+            }
+
+            rpsChart.data.labels = labels;
+            rpsChart.data.datasets[0].data = rpsData;
+            rpsChart.update();
+        };
+
+        eventSource.onerror = function(error) {
+            console.error('EventSource failed:', error);
+        };
+    </script>
+</body>
+</html>
+
