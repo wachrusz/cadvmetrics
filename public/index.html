@@ -23,7 +23,7 @@
     </div>
 
     <script>
-        const apiUrl = process.env.TARGET_URL + ':3000/v1/metrics/rps';
+        const apiUrl = 'https://localhost:3000/v1/metrics/rps';
         const chartCanvas = document.getElementById('rpsChart').getContext('2d');
         let rpsData = [];
         let labels = [];
