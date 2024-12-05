@@ -1,9 +1,15 @@
-require('dotenv').config();
 const express = require('express');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const path = require('path');
+const https = require('https');
+const fs = require('fs');
 
 const app = express();
+
+const options = {
+    key: fs.readFileSync('ok_server.key'),
+    cert: fs.readFileSync('ok_server.crt')
+};
 
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -20,6 +26,6 @@ app.use('/api', createProxyMiddleware({
     }
 }));
 
-app.listen(3000, () => {
+https.createServer(options, app).listen(3000, () => {
     console.log('Proxy server is running on port 3000');
 });

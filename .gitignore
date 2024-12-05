@@ -1,1 +1,4 @@
 .env
+ok_server.crt
+ok_server.csr
+ok_server.key
