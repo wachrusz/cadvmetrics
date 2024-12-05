@@ -9,8 +9,8 @@ const fs = require('fs');
 const app = express();
 console.log('Target URL:', process.env.TARGET_URL);
 const options = {
-    key: fs.readFileSync('ok_server.key'),
-    cert: fs.readFileSync('ok_server.crt')
+    key: fs.readFileSync('secret/ok_server.key'),
+    cert: fs.readFileSync('secret/ok_server.crt')
 };
 
 app.use(express.static(path.join(__dirname, 'public')));
