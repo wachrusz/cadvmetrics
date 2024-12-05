@@ -19,12 +19,12 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-app.use('/api', createProxyMiddleware({
+app.use('/', createProxyMiddleware({
     target: process.env.TARGET_URL,
     changeOrigin: true,
     secure: false,
     pathRewrite: {
-        '^/api': ''
+        '^/': ''
     }
 }));
 
