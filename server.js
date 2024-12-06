@@ -12,6 +12,8 @@ const options = {
     key: fs.readFileSync('KEY.key'),
     cert: fs.readFileSync('CRT.crt')
 };
+console.log('SSL Key Path:', 'KEY.key');
+console.log('SSL Cert Path:', 'CRT.crt');
 
 app.use(express.static(path.join(__dirname, 'public')));
 
